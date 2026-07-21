@@ -1,0 +1,14 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+     "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "seed-admin": "node scripts/seed-admin.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
