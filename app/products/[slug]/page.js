@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
+import AddToCartButton from "@/app/components/AddToCartButton";
 
 export const revalidate = 60;
 
@@ -22,6 +23,13 @@ export async function generateMetadata({ params }) {
   return {
     title: product.name,
     description: product.description,
+    openGraph: {
+      title: product.name,
+      description: `KSh ${(product.price_cents / 100).toLocaleString()} — ${product.description}`,
+      // No `images` key needed here.
+      // Next.js automatically wires the sibling opengraph-image.js output
+      // as the og:image for this page. Adding `images` here would override it.
+    },
   };
 }
 
@@ -45,7 +53,7 @@ export default async function ProductPage({ params }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
 
-        <div style={{
+        {/* <div style={{
           width: "100%",
           aspectRatio: "1 / 1",
           background: "#f5f5f5",
@@ -57,7 +65,19 @@ export default async function ProductPage({ params }) {
           fontSize: "0.9rem",
         }}>
           {product.name}
-        </div>
+        </div> */}
+        
+      <img
+        src={product.image_url}
+       
+        style={{
+          width: "100%",
+          aspectRatio: "1 / 1",
+          objectFit: "cover",
+          borderRadius: 8,
+          display: "block",
+        }}
+      />
 
         <div>
           <h1 style={{ margin: 0 }}>{product.name}</h1>
@@ -81,21 +101,7 @@ export default async function ProductPage({ params }) {
           </p>
 
           <div style={{ marginTop: "1.5rem" }}>
-            <button
-              disabled={product.stock === 0}
-              style={{
-                background: "#000",
-                color: "#fff",
-                padding: "0.75rem 1.5rem",
-                borderRadius: 4,
-                border: "none",
-                cursor: product.stock === 0 ? "default" : "pointer",
-                opacity: product.stock === 0 ? 0.5 : 1,
-                fontSize: "1rem",
-              }}
-            >
-              {product.stock === 0 ? "Out of stock" : "Add to cart"}
-            </button>
+            <AddToCartButton productId={product.id} stock={product.stock} />
           </div>
         </div>
       </div>
