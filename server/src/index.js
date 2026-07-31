@@ -5,17 +5,23 @@ import { productsRouter } from "./routes/products.js";
 import  { cartRouter } from "./routes/cart.js";
 import { checkoutRouter } from "./routes/checkout.js";
 import { paystackRouter } from "./routes/paystack.js";
+import { ordersRouter } from "./routes/orders.js";
 
 const app = express();
 
 app.use(cors({ origin: process.env.SHOP_URL }));
 app.use(express.json());
 
+app.post(
+  "/api/paystack/webhook",
+  express.raw({ type: "application/json" })
+);
+
 app.use("/api/products", productsRouter);
 app.use("/api/cart", cartRouter); 
 app.use("/api/checkout", checkoutRouter);
 app.use("/api/paystack", paystackRouter);
-
+app.use("/api/orders", ordersRouter);
 app.use((req, res) => {
   res.status(404).json({ error: `Cannot ${req.method} ${req.path}` });
 });
