@@ -1,7 +1,7 @@
 import { Router } from "express";
-import crypto from "node:crypto";
+import { initializeTransaction, generateReference } from "../paystack.js";
 import { pool, query } from "../db.js";
-import { initializeTransaction } from "../paystack.js";
+
 import { asyncHandler } from "../asyncHandler.js";
 
 export const checkoutRouter = Router();
@@ -34,7 +34,8 @@ checkoutRouter.post("/", asyncHandler(async (req, res) => {
   }
 
   // ── Step 2: Generate a unique reference for this transaction ───────────────
-  const reference = `order_${crypto.randomUUID()}`;
+  // const reference = `order_${crypto.randomUUID()}`;
+  const reference = generateReference();
 
   // ── Step 3: Database transaction ───────────────────────────────────────────
   // We use pool.connect() here (not query()) because BEGIN, COMMIT, and ROLLBACK

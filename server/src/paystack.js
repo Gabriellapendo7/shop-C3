@@ -8,10 +8,14 @@ function secretKey() {
   return key;
 }
 
-// amountInSubunit: amount in the smallest currency unit (kobo/cents) —
-// matches price_cents in the products table.
-// channels restricts which payment methods Paystack's hosted page offers.
-// In Kenya, "mobile_money" covers both M-Pesa and Airtel Money.
+// Generate a collision-resistant transaction reference.
+// Format: order_<uuid> — the prefix makes references immediately identifiable
+// in the Paystack dashboard. The UUID guarantees global uniqueness.
+// Paystack rejects references that have been used before — never reuse one.
+export function generateReference() {
+  return `order_${crypto.randomUUID()}`;
+}
+
 export async function initializeTransaction({
   email,
   amountInSubunit,
@@ -47,18 +51,36 @@ export async function initializeTransaction({
 export async function verifyTransaction(reference) {
   const res = await fetch(
     `${PAYSTACK_BASE_URL}/transaction/verify/${encodeURIComponent(reference)}`,
-    {
-      headers: { Authorization: `Bearer ${secretKey()}` },
-    }
+    { headers: { Authorization: `Bearer ${secretKey()}` } }
   );
 
   const data = await res.json();
   if (!res.ok || !data.status) {
     throw new Error(data.message || "Paystack transaction verify failed");
   }
-  return data.data; // { status: 'success' | 'failed', amount, reference, ... }
+  return data.data; // { status, amount, reference, customer, ... }
 }
 
+// Fetch recent transactions from Paystack — used by the admin transactions page
+// to compare Paystack's records against our database.
+// perPage: max 100 per Paystack's API limit.
+export async function listTransactions({ perPage = 10, page = 1 } = {}) {
+  const url = new URL(`${PAYSTACK_BASE_URL}/transaction`);
+  url.searchParams.set("perPage", perPage);
+  url.searchParams.set("page", page);
+
+  const res = await fetch(url.toString(), {
+    headers: { Authorization: `Bearer ${secretKey()}` },
+  });
+
+  const data = await res.json();
+  if (!res.ok || !data.status) {
+    throw new Error(data.message || "Paystack listTransactions failed");
+  }
+  return data.data; // Array of transaction objects
+}
+
+// Paystack signs webhook bodies with HMAC-SHA512 of the raw request body.
 export function isValidWebhookSignature(rawBody, signature) {
   const hash = crypto
     .createHmac("sha512", secretKey())
