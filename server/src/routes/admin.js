@@ -1,5 +1,5 @@
 // Add this import at the top of admin.js
-import { listTransactions } from "../paystack.js";
+import { listTransactions } from "../services/paystackService.js";
 
 // Add this route inside adminRouter (after the existing routes)
 adminRouter.get("/transactions", requireAdmin, asyncHandler(async (req, res) => {

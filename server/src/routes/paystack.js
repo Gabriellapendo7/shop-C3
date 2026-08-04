@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { query } from "../db.js";
-import { verifyTransaction, isValidWebhookSignature } from "../paystack.js";
-import { confirmPayment, markPaymentFailed } from "../paymentConfirmation.js";
-import { asyncHandler } from "../asyncHandler.js";
+import { query } from "../infrastructure/db.js";
+import { verifyTransaction, isValidWebhookSignature } from "../services/paystackService.js";
+import { confirmPayment, markPaymentFailed } from "../services/paymentService.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 
 export const paystackRouter = Router();
 

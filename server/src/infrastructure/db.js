@@ -12,3 +12,6 @@ export const pool = new Pool({
   database: process.env.DB_NAME,
   max: 10,
 });
+
+// Direct query helper for routes that don't use repositories
+export const query = (sql, params) => pool.query(sql, params);

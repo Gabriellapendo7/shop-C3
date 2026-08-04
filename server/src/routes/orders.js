@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { query } from "../db.js";
-import { asyncHandler } from "../asyncHandler.js";
+import { query } from "../infrastructure/db.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 
 export const ordersRouter = Router();
 
