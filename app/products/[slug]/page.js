@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { apiFetch } from "@/lib/api";
-import AddToCartButton from "@/app/components/AddToCartButton";
+import { apiFetch } from "@/src/services/api";
+import AddToCartButton from "@/src/components/features/AddToCartButton";
 
 export const revalidate = 60;
 

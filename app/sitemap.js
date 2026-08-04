@@ -1,4 +1,4 @@
-import { apiFetch } from "@/lib/api";
+import { apiFetch } from "@/src/services/api";
 
 export default async function sitemap() {
   const siteUrl =

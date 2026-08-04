@@ -1,16 +1,11 @@
-import { query } from "./db.js";
-import { restockFailedOrder } from "./orderLifecycle.js";
+import * as orderRepository from "#repositories/orderRepository.js";
+import { restockFailedOrder } from "#services/orderLifecycleService.js";
 
 // Shared by the webhook and the verify redirect.
 // Must be idempotent — Paystack retries webhooks and both paths
 // may run for the same payment.
 export async function confirmPayment(reference, paidAmountInSubunit) {
-  const { rows } = await query(
-    `SELECT id, status, total_cents
-     FROM orders WHERE paystack_reference = $1`,
-    [reference]
-  );
-  const order = rows[0];
+  const order = await orderRepository.findPaymentStateByReference(reference);
 
   if (!order) {
     console.warn(`Payment confirmation for unknown reference: ${reference}`);
@@ -31,33 +26,21 @@ export async function confirmPayment(reference, paidAmountInSubunit) {
       `Amount mismatch for order ${order.id}: ` +
       `expected ${order.total_cents}, got ${paidAmountInSubunit}`
     );
-    await query(
-      "UPDATE orders SET status = 'failed', updated_at = NOW() WHERE id = $1",
-      [order.id]
-    );
+    await orderRepository.updateStatus(order.id, "failed");
     await restockFailedOrder(order.id);
     return;
   }
 
   // All checks pass — mark as paid
-  await query(
-    "UPDATE orders SET status = 'paid', updated_at = NOW() WHERE id = $1",
-    [order.id]
-  );
+  await orderRepository.updateStatus(order.id, "paid");
 }
 
 // Called when Paystack reports failure or the customer abandons payment.
-// The WHERE clause's AND status = 'pending' makes this idempotent —
-// if the order is already failed (or paid), RETURNING returns nothing.
+// markPendingAsFailed only matches orders still pending, so a repeat call
+// returns no id and we do not restock twice.
 export async function markPaymentFailed(reference) {
-  const { rows } = await query(
-    `UPDATE orders
-     SET status = 'failed', updated_at = NOW()
-     WHERE paystack_reference = $1 AND status = 'pending'
-     RETURNING id`,
-    [reference]
-  );
-  if (rows[0]) {
-    await restockFailedOrder(rows[0].id);
+  const orderId = await orderRepository.markPendingAsFailed(reference);
+  if (orderId) {
+    await restockFailedOrder(orderId);
   }
 }

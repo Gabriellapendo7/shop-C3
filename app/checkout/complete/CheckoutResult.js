@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { apiFetch } from "@/lib/api";
-import { clearCart } from "@/lib/cart";
+import { apiFetch } from "@/src/services/api";
+import { clearCart } from "@/src/services/cart";
 
 const MESSAGES = {
   success: {

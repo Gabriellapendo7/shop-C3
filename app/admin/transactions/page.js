@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { apiFetch } from "@/lib/api";
-import { formatAmount, shortReference, transactionStatusDisplay } from "@/lib/paystack";
-import { channelLabel } from "@/lib/paystack-channels";
+import { apiFetch } from "@/src/services/api";
+import { formatAmount, shortReference, transactionStatusDisplay } from "@/src/services/paystack";
+import { channelLabel } from "@/src/services/paystack-channels";
 
 export default function AdminTransactionsPage() {
   const router = useRouter();

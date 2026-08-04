@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { apiFetch } from "@/lib/api";
-import { readCart, updateCartQuantity, clearCart } from "@/lib/cart";
-import CartSummary from "@/app/components/CartSummary";
-import QuantityStepper from "@/app/components/QuantityStepper";
+import { apiFetch } from "@/src/services/api";
+import { readCart, updateCartQuantity, clearCart } from "@/src/services/cart";
+import CartSummary from "@/src/components/features/CartSummary";
+import QuantityStepper from "@/src/components/features/QuantityStepper";
 
 export default function CartPage() {
   const [lines, setLines] = useState([]);

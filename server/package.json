@@ -1,12 +1,19 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Shop API — Express, PostgreSQL, Paystack",
+  "type": "module",
+  "main": "src/index.js",
+  "imports": {
+    "#infrastructure/*": "./src/infrastructure/*",
+    "#middleware/*": "./src/middleware/*",
+    "#repositories/*": "./src/repositories/*",
+    "#services/*": "./src/services/*",
+    "#routes/*": "./src/routes/*"
+  },
   "scripts": {
-     "dev": "node --watch src/index.js",
-    "start": "node src/index.js",
-    "seed-admin": "node scripts/seed-admin.js"
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",

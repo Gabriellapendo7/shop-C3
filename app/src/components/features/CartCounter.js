@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getCartCount, onCartChange } from "@/lib/cart";
+import { getCartCount, onCartChange } from "@/src/services/cart";
 
 export default function CartCounter() {
   const [count, setCount] = useState(0);

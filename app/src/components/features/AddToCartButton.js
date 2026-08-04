@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { addToCart } from "@/lib/cart";
+import { addToCart } from "@/src/services/cart";
 
 export default function AddToCartButton({ productId, stock }) {
   const [added, setAdded] = useState(false);

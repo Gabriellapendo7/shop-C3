@@ -1,8 +1,8 @@
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
-import AxeDevtools from "@/app/components/AxeDevtools";
-import CartCounter from "@/app/components/CartCounter";
+import AxeDevtools from "@/src/components/features/AxeDevtools";
+import CartCounter from "@/src/components/features/CartCounter";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata = {

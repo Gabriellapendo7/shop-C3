@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { apiFetch } from "@/lib/api";
-import ClearCartOnPaid from "@/app/components/ClearCartOnPaid";
+import { apiFetch } from "@/src/services/api";
+import ClearCartOnPaid from "@/src/components/features/ClearCartOnPaid";
 
 // Status-aware copy — what to show for each order state
 const STATUS_COPY = {

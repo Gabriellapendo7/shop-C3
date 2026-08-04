@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { apiFetch } from "@/lib/api";
+import { apiFetch } from "@/src/services/api";
 
 export const metadata = { title: "All Products" };
 export const revalidate = 60;

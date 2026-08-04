@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { apiFetch } from "@/lib/api";
-import { readCart } from "@/lib/cart";
-import CartSummary from "@/app/components/CartSummary";
-import PaystackCheckoutButton from "@/app/components/PaystackCheckoutButton";
+import { apiFetch } from "@/src/services/api";
+import { readCart } from "@/src/services/cart";
+import CartSummary from "@/src/components/features/CartSummary";
+import PaystackCheckoutButton from "@/src/components/features/PaystackCheckoutButton";
 
 export default function CheckoutPage() {
   const [lines, setLines] = useState([]);
